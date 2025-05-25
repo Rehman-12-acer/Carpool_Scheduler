@@ -163,3 +163,4 @@ def update_match_status(request, match_id, status):
     except Match.DoesNotExist:
         messages.error(request, 'Match not found.')
     return redirect('matches')
+

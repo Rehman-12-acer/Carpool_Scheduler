@@ -22,5 +22,4 @@ from scheduler.views import run_migrations
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('scheduler.urls')),
-    path('run-migrations/', run_migrations),
 ]
