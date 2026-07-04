@@ -8,6 +8,7 @@ from .utils import create_matches_for_user
 from .forms import ProfileForm, ScheduleForm
 from django.db.models import Q
 import logging
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -27,16 +28,32 @@ def home(request):
         return redirect('profile')
     return render(request, 'home.html')
 
+
+
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            UserProfile.objects.create(user=user)
-            login(request, user)
-            return redirect('profile')
+            try:
+                print("Saving user...")
+                user = form.save()
+
+                print("Creating profile...")
+                UserProfile.objects.create(user=user)
+
+                print("Logging in...")
+                login(request, user)
+
+                print("Redirecting...")
+                return redirect('profile')
+
+            except Exception:
+                print("\n=== REGISTER ERROR ===")
+                traceback.print_exc()
+                raise
     else:
         form = UserCreationForm()
+
     return render(request, 'register.html', {'form': form})
 
 def login_view(request):
